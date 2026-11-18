@@ -1,0 +1,25 @@
+name: campus_coupon
+description: Campus Coupon - CUT student mobile app (Flutter + Supabase)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.8.0     # Auth + Database + Storage (architecture diagram)
+  qr_flutter: ^4.1.0           # QR on "Coupon Redeemed" screen
+  intl: ^0.19.0                # "23 November 2026" date formatting
+  image_picker: ^1.1.2         # Profile picture: gallery / camera
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

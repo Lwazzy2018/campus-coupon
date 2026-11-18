@@ -1,0 +1,33 @@
+@model List<RedemptionRecord>
+@{ ViewData["Title"] = "Redemptions"; }
+<h1 class="page-title">Coupon Redemptions</h1>
+<p class="page-sub">Coupons students have redeemed with their points. Cafeteria staff approve (meal given) or reject (points refunded).</p>
+
+<table class="cc-table">
+    <thead><tr><th>Code</th><th>Coupon</th><th>Points</th><th>Student</th><th>Redeemed</th><th>Status</th><th>Processed by</th></tr></thead>
+    <tbody>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td><code>@r.RedemptionCode</code></td>
+            <td>@r.CouponTitle</td>
+            <td>@r.PointsCost</td>
+            <td>@r.StudentName (@r.StudentNumber)</td>
+            <td>@r.CreatedAt.ToLocalTime().ToString("d MMM yyyy HH:mm")</td>
+            <td>
+                <span class="pill @r.StatusPill">@r.StatusLabel</span>
+                @if (r.Status == "rejected") { <div class="small">@r.RejectReason</div> }
+            </td>
+            <td>
+                @if (r.ProcessedAt is not null)
+                {
+                    <span>@r.ProcessedBy</span>
+                    <div class="small">@r.ProcessedAt.Value.ToLocalTime().ToString("d MMM HH:mm")</div>
+                }
+                else { <span>-</span> }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+@if (Model.Count == 0) { <p>No coupons have been redeemed yet.</p> }

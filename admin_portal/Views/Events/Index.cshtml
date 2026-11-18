@@ -1,0 +1,31 @@
+@model List<EventRow>
+@{ ViewData["Title"] = "Events"; }
+<div class="row-between">
+    <div>
+        <h1 class="page-title">Events</h1>
+        <p class="page-sub">All campus events you manage.</p>
+    </div>
+    <a class="btn-primary inline" asp-action="Create">+ Create Event</a>
+</div>
+
+@if (Model.Count == 0) { <p>No events found.</p> }
+<div class="event-grid">
+@foreach (var e in Model)
+{
+    <a class="event-card" asp-action="Details" asp-route-id="@e.EventId">
+        <div class="event-thumb">
+            @if (!string.IsNullOrEmpty(e.ImageUrl)) { <img src="@e.ImageUrl" alt="" /> }
+            else { <span class="thumb-ico">📅</span> }
+        </div>
+        <div class="event-body">
+            <div class="row-between">
+                <b class="e-title">@e.Title</b>
+                <span class="badge @e.Badge.ToLower()">@e.Badge</span>
+            </div>
+            <div>📅 @e.DateLabel &nbsp; 🕑 @e.TimeLabel</div>
+            <div>📍 @e.Location</div>
+            <div>🪙 @e.PointsReward Points &nbsp; 👥 @e.RsvpCount RSVPs</div>
+        </div>
+    </a>
+}
+</div>

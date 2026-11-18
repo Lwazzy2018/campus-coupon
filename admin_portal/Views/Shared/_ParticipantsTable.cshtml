@@ -1,0 +1,67 @@
+@model List<ParticipantRow>
+@{
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var showEvent = ViewData["ShowEvent"] as bool? ?? false;
+}
+@if (Model.Count == 0)
+{
+    <p>No students have RSVP'd yet.</p>
+}
+else
+{
+<table class="cc-table">
+    <thead>
+        <tr>
+            <th>#</th><th>Student Name</th><th>Student Number</th>
+            @if (showEvent) { <th>Event</th> }
+            <th>Status</th><th>Attendance</th>
+        </tr>
+    </thead>
+    <tbody>
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        var p = Model[i];
+        <tr>
+            <td>@(i + 1)</td>
+            <td>@p.StudentName</td>
+            <td>@p.StudentNumber</td>
+            @if (showEvent) { <td><a asp-controller="Events" asp-action="Details" asp-route-id="@p.EventId">@p.EventTitle</a></td> }
+            <td>
+                @if (p.Status == "attended")
+                {
+                    <span class="pill attended">Attended</span>
+                }
+                else if (p.Status == "not_attended")
+                {
+                    <span class="pill absent">Not attended</span>
+                }
+                else
+                {
+                    <span class="pill registered">Registered</span>
+                }
+            </td>
+            <td class="actions">
+                @if (p.Status != "attended")
+                {
+                    <form asp-controller="Participants" asp-action="MarkAttendance" method="post">
+                        <input type="hidden" name="rsvpId" value="@p.RsvpId" />
+                        <input type="hidden" name="attended" value="true" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <button class="mini green" type="submit">✓ Attended</button>
+                    </form>
+                }
+                @if (p.Status == "registered")
+                {
+                    <form asp-controller="Participants" asp-action="MarkAttendance" method="post">
+                        <input type="hidden" name="rsvpId" value="@p.RsvpId" />
+                        <input type="hidden" name="attended" value="false" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <button class="mini grey" type="submit">✗ Absent</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+}

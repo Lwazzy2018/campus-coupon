@@ -1,0 +1,36 @@
+@model LoginVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Login";
+}
+<h3 class="auth-title">Welcome Back</h3>
+<p class="auth-sub">Sign in to your Campus Coupon Admin Portal</p>
+
+<form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="loginForm">
+    <div asp-validation-summary="ModelOnly" class="alert error"></div>
+
+    <div class="pill-input">
+        <span>👤</span>
+        <input asp-for="Identifier" placeholder="Staff number or email" autocomplete="username" />
+    </div>
+    <span asp-validation-for="Identifier" class="field-error"></span>
+
+    <div class="pill-input">
+        <span>🔒</span>
+        <input asp-for="Password" placeholder="Password" autocomplete="current-password" id="pw" />
+        <button type="button" class="eye" onclick="var p=document.getElementById('pw'); p.type = p.type === 'password' ? 'text' : 'password'">👁</button>
+    </div>
+    <span asp-validation-for="Password" class="field-error"></span>
+
+    <div class="right">
+        <button type="submit" form="forgotForm" class="link-btn">Forgot Password?</button>
+    </div>
+
+    <button type="submit" class="btn-primary big">Login</button>
+    <p class="small center">Don't have an account? <a asp-action="Register"><b>Register</b></a></p>
+</form>
+
+<form asp-action="ForgotPassword" method="post" id="forgotForm"
+      onsubmit="this.identifier.value = document.getElementById('Identifier').value; if(!this.identifier.value){alert('Type your staff number or email first.'); return false;}">
+    <input type="hidden" name="identifier" />
+</form>

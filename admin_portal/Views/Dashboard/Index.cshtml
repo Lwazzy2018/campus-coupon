@@ -1,0 +1,44 @@
+@model (DashboardStats Stats, List<ActivityRow> Activity)
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<h1 class="page-title">Good day,  @User.Identity?.Name</h1>
+<p class="page-sub">Manage campus engagement with ease.</p>
+
+<div class="stat-row">
+    <a class="stat-card" asp-controller="Events" asp-action="Index">
+        <div class="stat-ico">📅</div>
+        <div class="stat-num">@Model.Stats.TotalEvents</div>
+        <div class="stat-label">Total Events</div>
+    </a>
+    <a class="stat-card" asp-controller="Events" asp-action="Index">
+        <div class="stat-ico">▶️</div>
+        <div class="stat-num">@Model.Stats.ActiveEvents</div>
+        <div class="stat-label">Active Events</div>
+    </a>
+    <a class="stat-card" asp-controller="Redemptions" asp-action="Index">
+        <div class="stat-ico">🪙</div>
+        <div class="stat-num">@Model.Stats.PointsRedeemed</div>
+        <div class="stat-label">Points Redeemed</div>
+    </a>
+    <a class="stat-card" asp-controller="Participants" asp-action="Index">
+        <div class="stat-ico">👥</div>
+        <div class="stat-num">@Model.Stats.TotalParticipants</div>
+        <div class="stat-label">Total Participants</div>
+    </a>
+</div>
+
+<h2 class="section-title">Recent Activity</h2>
+@if (Model.Activity.Count == 0)
+{
+    <p>No activity yet. Create your first event to get started.</p>
+}
+@foreach (var a in Model.Activity)
+{
+    <div class="activity">
+        <div class="a-title">@a.Title</div>
+        <div class="a-detail">@a.Detail</div>
+        <div class="a-time">@a.Ago</div>
+    </div>
+}
+<p><a class="btn-primary inline" asp-controller="Events" asp-action="Create">+ Create Event</a></p>

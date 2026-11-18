@@ -1,0 +1,68 @@
+@model EventFormVm
+@{
+    var editing = Model.EventId.HasValue;
+    ViewData["Title"] = editing ? "Edit Event" : "Create Event";
+}
+<!-- Figma web: "Create Event" - two-column form, Create Event button bottom-right -->
+<h1 class="page-title">@ViewData["Title"]</h1>
+<p class="page-sub">Fill in the event details</p>
+
+<form asp-action="@(editing ? "Edit" : "Create")" asp-route-id="@Model.EventId" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="alert error"></div>
+    <input type="hidden" asp-for="ImageUrl" />
+
+    <div class="form-grid">
+        <div class="col">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" placeholder="Enter event title" />
+            <span asp-validation-for="Title" class="field-error"></span>
+
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" rows="4" placeholder="Enter event description"></textarea>
+            <span asp-validation-for="Description" class="field-error"></span>
+
+            <label asp-for="EventDate">Date</label>
+            <input asp-for="EventDate" type="date" asp-format="{0:yyyy-MM-dd}" />
+            <span asp-validation-for="EventDate" class="field-error"></span>
+
+            <label>Time</label>
+            <div class="grid-2 tight">
+                <input asp-for="StartTime" type="time" asp-format="{0:HH:mm}" title="Start time" />
+                <input asp-for="EndTime" type="time" asp-format="{0:HH:mm}" title="End time" />
+            </div>
+            <span asp-validation-for="StartTime" class="field-error"></span>
+            <span asp-validation-for="EndTime" class="field-error"></span>
+        </div>
+
+        <div class="col">
+            <label asp-for="Location"></label>
+            <input asp-for="Location" placeholder="Enter location" />
+            <span asp-validation-for="Location" class="field-error"></span>
+
+            <label asp-for="PointsReward"></label>
+            <div class="icon-input"><span>🪙</span><input asp-for="PointsReward" type="number" min="0" max="1000" placeholder="Enter points" /></div>
+            <span asp-validation-for="PointsReward" class="field-error"></span>
+
+            <label asp-for="Category"></label>
+            <select asp-for="Category" asp-items="@(new SelectList(Lists.Categories))">
+                <option value="">Select category</option>
+            </select>
+            <span asp-validation-for="Category" class="field-error"></span>
+
+            <label asp-for="Status"></label>
+            <select asp-for="Status">
+                <option value="published">Published (visible to students)</option>
+                <option value="draft">Draft (hidden)</option>
+                @if (editing) { <option value="closed">Closed (no new RSVPs)</option> }
+            </select>
+
+            <label asp-for="Poster"></label>
+            <input asp-for="Poster" type="file" accept=".jpg,.jpeg,.png,.webp" />
+            <span asp-validation-for="Poster" class="field-error"></span>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl)) { <img src="@Model.ImageUrl" class="poster-preview" alt="Current poster" /> }
+
+            <button type="submit" class="btn-primary">@(editing ? "Save Changes" : "Create Event")</button>
+            @if (editing) { <a class="btn-outline" asp-action="Details" asp-route-id="@Model.EventId">Cancel</a> }
+        </div>
+    </div>
+</form>

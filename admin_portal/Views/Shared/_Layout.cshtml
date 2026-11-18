@@ -1,0 +1,74 @@
+@{
+    var active = ViewData["Active"] as string ?? "";
+    var isAdmin = User.IsInRole("admin");
+    var isCafeteria = User.IsInRole("cafeteria");
+    string Cls(string item) => item == active ? "nav-item active" : "nav-item";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(ViewData["Title"] ?? "Admin Portal") - Campus Coupon</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="shell">
+        <!-- Sidebar: Figma "Welcome Admin" left panel -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="~/images/cut_logo_white.png" alt="CUT" class="brand-logo"
+                     onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'brand-text',textContent:'CUT'}))" />
+                <div class="brand-title">Campus Coupon</div>
+                <div class="brand-sub">@(isCafeteria ? "Cafeteria Portal" : "Admin Portal")</div>
+            </div>
+            <nav>
+                @if (isAdmin)
+                {
+                    <a class="@Cls("Dashboard")" asp-controller="Dashboard" asp-action="Index"><span class="ico">🏠</span>Dashboard</a>
+                    <a class="@Cls("Event")" asp-controller="Events" asp-action="Index"><span class="ico">🎉</span>Event</a>
+                    <a class="@Cls("Participants")" asp-controller="Participants" asp-action="Index"><span class="ico">👥</span>Participants</a>
+                    <a class="@Cls("Profile")" asp-controller="Profile" asp-action="Index"><span class="ico">👤</span>Profile</a>
+                    <a class="@Cls("Settings")" asp-controller="Profile" asp-action="Notifications"><span class="ico">⚙️</span>Settings</a>
+                    <a class="@Cls("Redemptions")" asp-controller="Redemptions" asp-action="Index"><span class="ico">🎟️</span>Redemptions</a>
+                }
+                @if (isCafeteria)
+                {
+                    <!-- Use Case Diagram: Cafeteria staff -> Accept coupon redemption -->
+                    <a class="@Cls("CafeteriaCurrent")" asp-controller="Cafeteria" asp-action="Index"><span class="ico">🍽️</span>Current Redemptions</a>
+                    <a class="@Cls("CafeteriaHistory")" asp-controller="Cafeteria" asp-action="History"><span class="ico">📋</span>Redemption History</a>
+                    <a class="@Cls("Coupons")" asp-controller="Coupons" asp-action="Index"><span class="ico">🍔</span>Meals</a>
+                }
+            </nav>
+            @if (isCafeteria)
+            {
+                <div class="staff-chip">👤 @User.Identity?.Name<br /><span>Cafeteria Staff</span></div>
+            }
+            <form asp-controller="Account" asp-action="Logout" method="post" class="logout">
+                <button type="submit"><span class="ico big">↪</span>Logout</button>
+            </form>
+        </aside>
+
+        <main class="main">
+            @if (isAdmin)
+            {
+                <form asp-controller="Search" asp-action="Index" method="get" class="searchbar">
+                    <span>🔍</span>
+                    <input name="q" value="@ViewData["Search"]" placeholder="Search events , Participants" />
+                </form>
+            }
+
+            @if (TempData["Success"] is string ok)
+            {
+                <div class="alert success">@ok</div>
+            }
+            @if (TempData["Error"] is string err)
+            {
+                <div class="alert error">@err</div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

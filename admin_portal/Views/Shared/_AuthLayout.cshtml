@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Campus Coupon Admin Portal</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="auth-body">
+    <!-- Figma "Welcome Page" / "Create Account": logo card left, grey form panel right, blue clouds -->
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="auth-wrap">
+        <section class="auth-left">
+            <div class="logo-card">
+                <img src="~/images/cut_logo.png" alt="Central University of Technology, Free State"
+                     onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'logo-fallback',textContent:'CUT'}))" />
+            </div>
+            <h1>Campus Coupon</h1>
+            <h2>Admin Portal</h2>
+            <p class="tagline">Manage | Monitor | Empower</p>
+        </section>
+        <section class="auth-panel">
+            @if (TempData["Success"] is string ok) { <div class="alert success">@ok</div> }
+            @RenderBody()
+        </section>
+    </div>
+</body>
+</html>

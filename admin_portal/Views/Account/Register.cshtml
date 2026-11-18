@@ -1,0 +1,66 @@
+@model RegisterVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Create Account";
+}
+<h3 class="auth-title">Create Your Staff Account</h3>
+<p class="auth-sub">Register to access the Campus Coupon portal as an Event Administrator or Cafeteria Staff</p>
+
+<form asp-action="Register" method="post">
+    <div asp-validation-summary="ModelOnly" class="alert error"></div>
+
+    <div class="pill-input">
+        <span>🪪</span>
+        <select asp-for="AccountType" id="AccountType">
+            @foreach (var t in Lists.AccountTypes)
+            {
+                <option value="@t.Key">Account type - @t.Value</option>
+            }
+        </select>
+    </div>
+    <span asp-validation-for="AccountType" class="field-error"></span>
+
+    <div class="grid-2">
+        <div>
+            <div class="pill-input"><span>👤</span><input asp-for="FullName" placeholder="Full Name" /></div>
+            <span asp-validation-for="FullName" class="field-error"></span>
+        </div>
+        <div>
+            <div class="pill-input"><span>✉️</span><input asp-for="Email" placeholder="Email (e.g. admin@cut.ac.za)" /></div>
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+        <div>
+            <div class="pill-input"><span>👤</span><input asp-for="StaffNumber" placeholder="Staff number (e.g. 987654)" /></div>
+            <span asp-validation-for="StaffNumber" class="field-error"></span>
+        </div>
+        <div>
+            <div class="pill-input"><span>🔒</span><input asp-for="Password" placeholder="Password" /></div>
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+        <div id="deptBox">
+            <div class="pill-input">
+                <span>🏢</span>
+                <select asp-for="Department" asp-items="@(new SelectList(Lists.Departments))">
+                    <option value="">Department - Select department</option>
+                </select>
+            </div>
+            <span asp-validation-for="Department" class="field-error"></span>
+        </div>
+        <div>
+            <div class="pill-input"><span>🔒</span><input asp-for="ConfirmPassword" placeholder="Confirm Password" /></div>
+            <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn-primary big">Register</button>
+    <p class="center big-link">Already have an Account?<a asp-action="Login"><b>Login</b></a></p>
+</form>
+
+<script>
+    // Department is only asked of Event Administrators
+    (function () {
+        var type = document.getElementById('AccountType'), box = document.getElementById('deptBox');
+        function sync() { box.style.visibility = type.value === 'cafeteria' ? 'hidden' : 'visible'; }
+        type.addEventListener('change', sync); sync();
+    })();
+</script>

@@ -1,0 +1,33 @@
+@model ProfileVm
+@{ ViewData["Title"] = "Edit Profile"; }
+<!-- Figma web: "Profile" (Edit Profile) -->
+<h1 class="page-title">Edit Profile</h1>
+
+<form asp-action="Index" method="post" class="profile-form">
+    <div asp-validation-summary="ModelOnly" class="alert error"></div>
+
+    <label asp-for="Name"></label>
+    <div><input asp-for="Name" /><span asp-validation-for="Name" class="field-error"></span></div>
+
+    <label asp-for="Email"></label>
+    <div><input asp-for="Email" readonly title="Your login email cannot be changed here" /></div>
+
+    <label asp-for="StaffNumber"></label>
+    <div><input asp-for="StaffNumber" /><span asp-validation-for="StaffNumber" class="field-error"></span></div>
+
+    <label asp-for="Department"></label>
+    <div>
+        <select asp-for="Department" asp-items="@(new SelectList(Lists.Departments))">
+            <option value="">Select department</option>
+        </select>
+    </div>
+
+    <label asp-for="Phone"></label>
+    <div><input asp-for="Phone" placeholder="Enter Phone Number" /><span asp-validation-for="Phone" class="field-error"></span></div>
+
+    <div></div>
+    <div class="profile-buttons">
+        <a asp-controller="Dashboard" asp-action="Index" class="btn-cancel">Cancel</a>
+        <button type="submit" class="btn-save">Save Changes</button>
+    </div>
+</form>

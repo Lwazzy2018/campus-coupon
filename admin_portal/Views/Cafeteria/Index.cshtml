@@ -1,0 +1,97 @@
+@model List<RedemptionRecord>
+@{
+    var stats = ViewData["Stats"] as CafeteriaStats ?? new CafeteriaStats();
+    var q = ViewData["Query"] as string;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<!-- Use Case Diagram: Cafeteria staff -> "Accept coupon redemption" -->
+<h1 class="page-title">Current Redemptions</h1>
+<p class="page-sub">Ask the student for their phone, check the code and their student card, then <b>Approve</b> to give the meal or <b>Reject</b> if you cannot.</p>
+
+<div class="stat-row caf-stats">
+    <div class="stat-card"><div class="stat-ico">⏳</div><div class="stat-num">@stats.Pending</div><div class="stat-label">Waiting</div></div>
+    <div class="stat-card"><div class="stat-ico">✅</div><div class="stat-num">@stats.ApprovedToday</div><div class="stat-label">Approved today</div></div>
+    <div class="stat-card"><div class="stat-ico">❌</div><div class="stat-num">@stats.RejectedToday</div><div class="stat-label">Rejected today</div></div>
+    <div class="stat-card"><div class="stat-ico">🪙</div><div class="stat-num">@stats.PointsApprovedToday</div><div class="stat-label">Points used today</div></div>
+</div>
+
+<!-- Type (or scan) the code shown on the student's "Coupon Redeemed" screen -->
+<form method="get" asp-action="Index" class="filter-bar code-lookup">
+    <div class="pill-search wide"><span>🎟️</span>
+        <input name="q" value="@q" placeholder="Redemption code, student number or name (e.g. CC2026-7843-2219)" autofocus autocomplete="off" />
+    </div>
+    <button type="submit" class="btn-primary inline">Find</button>
+    @if (!string.IsNullOrEmpty(q)) { <a asp-action="Index" class="link-btn">Show all waiting</a> }
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-queue">
+        <div class="stat-ico">🍽️</div>
+        <p>@(string.IsNullOrEmpty(q) ? "No coupons are waiting. New redemptions appear here automatically." : "No waiting coupon matches your search.")</p>
+    </div>
+}
+
+<div class="redeem-grid">
+@foreach (var r in Model)
+{
+    <div class="redeem-card @(r.IsExpired ? "expired" : "")">
+        <div class="rc-head">
+            <code class="rc-code">@r.RedemptionCode</code>
+            <span class="pill registered">Pending</span>
+        </div>
+        <div class="rc-coupon">@r.CouponTitle <span class="rc-points">@r.PointsCost pts</span></div>
+        <div class="rc-student">👤 <b>@r.StudentName</b> &nbsp;·&nbsp; @r.StudentNumber</div>
+        <div class="rc-meta">
+            Redeemed @r.WaitingFor &nbsp;·&nbsp;
+            @if (r.IsExpired) { <b class="danger">Expired @r.ValidUntil.ToString("d MMM yyyy")</b> }
+            else { <span>Valid until @r.ValidUntil.ToString("d MMM yyyy")</span> }
+        </div>
+
+        <div class="rc-actions">
+            @if (!r.IsExpired)
+            {
+                <form asp-action="Approve" method="post"
+                      data-confirm="Give @r.CouponTitle to @r.StudentName (@r.StudentNumber)?">
+                    <input type="hidden" name="id" value="@r.RedemptionId" />
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <button type="submit" class="btn-approve">✔ Approve &amp; give meal</button>
+                </form>
+            }
+            <form asp-action="Reject" method="post" class="reject-form"
+                  data-confirm="Reject this coupon? No meal is given and @r.PointsCost points go back to @r.StudentName's wallet.">
+                <input type="hidden" name="id" value="@r.RedemptionId" />
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <select name="reason" required>
+                    <option value="">Reason for rejecting…</option>
+                    @foreach (var reason in Lists.RejectReasons)
+                    {
+                        <option value="@reason" selected="@(r.IsExpired && reason == "Coupon expired")">@reason</option>
+                    }
+                </select>
+                <button type="submit" class="btn-reject">✖ Reject</button>
+            </form>
+        </div>
+    </div>
+}
+</div>
+
+<script>
+    // "Are you sure?" before Approve / Reject (text comes from data-confirm, safely encoded)
+    document.querySelectorAll('form[data-confirm]').forEach(function (f) {
+        f.addEventListener('submit', function (e) {
+            if (!confirm(f.dataset.confirm)) e.preventDefault();
+        });
+    });
+
+    // Keep the queue fresh: reload every 30 s, unless staff are typing a code or have picked a reason.
+    var reasonPicked = false;
+    document.querySelectorAll('select[name=reason]').forEach(function (s) {
+        s.addEventListener('change', function () { reasonPicked = true; });
+    });
+    setInterval(function () {
+        var el = document.activeElement;
+        var busy = el && ((el.tagName === 'INPUT' && el.value !== '') || el.tagName === 'SELECT');
+        if (!busy && !reasonPicked) location.reload();
+    }, 30000);
+</script>

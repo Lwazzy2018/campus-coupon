@@ -1,0 +1,27 @@
+@model List<ParticipantRow>
+@{
+    ViewData["Title"] = "Participants";
+    ViewData["ShowEvent"] = true;
+    var events = ViewData["Events"] as List<EventRow> ?? new();
+    var eventId = ViewData["EventId"] as long?;
+    var filter = ViewData["Filter"] as string ?? "All";
+}
+<!-- Figma web: "Participants" -->
+<h1 class="page-title">Participants</h1>
+
+<form method="get" class="filter-bar" id="pf">
+    <div class="pill-search"><span>🔍</span><input name="search" value="@ViewData["Search"]" placeholder="Search" /></div>
+    <select name="eventId" onchange="pf.submit()">
+        <option value="">All events</option>
+        @foreach (var ev in events)
+        {
+            <option value="@ev.EventId" selected="@(ev.EventId == eventId)">@ev.Title (@ev.EventDate.ToString("d MMM"))</option>
+        }
+    </select>
+    @foreach (var f in new[] { "All", "Registered", "Attended" })
+    {
+        <button type="submit" name="filter" value="@f" class="tab @(f == filter ? "on" : "")">@f</button>
+    }
+</form>
+
+<partial name="_ParticipantsTable" model="Model" />

@@ -1,0 +1,22 @@
+@model (List<EventRow> Events, List<ParticipantRow> People)
+@{
+    ViewData["Title"] = "Search";
+    ViewData["ShowEvent"] = true;
+}
+<h1 class="page-title">Search results for "@ViewData["Search"]"</h1>
+
+<h2 class="section-title">Events (@Model.Events.Count)</h2>
+<div class="event-grid">
+@foreach (var e in Model.Events)
+{
+    <a class="event-card" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">
+        <div class="event-body">
+            <b class="e-title">@e.Title</b>
+            <div>📅 @e.DateLabel &nbsp; 📍 @e.Location</div>
+        </div>
+    </a>
+}
+</div>
+
+<h2 class="section-title">Participants (@Model.People.Count)</h2>
+<partial name="_ParticipantsTable" model="Model.People" />

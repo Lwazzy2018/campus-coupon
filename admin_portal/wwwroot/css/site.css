@@ -1,0 +1,223 @@
+/* =====================================================================
+   Campus Coupon Admin Portal - colours sampled from the Figma web screens
+   ===================================================================== */
+:root {
+    --navy: #003261;        /* sidebar body, buttons, headings */
+    --navy-top: #073c88;    /* sidebar logo block */
+    --grey: #d9d9d9;        /* page background + active nav item */
+    --white: #ffffff;
+    --text: #0b2a4a;
+    --muted: #8a8fa0;
+    --thead: #8fdafa;       /* Participants table header */
+    --attended: #d2faa1;    /* "Attended" pill */
+    --registered: #46aaf7;  /* "Registered" pill */
+    --badge: #d2faa1;       /* "Upcoming" badge */
+    --danger: #e00000;
+    --cloud: #bde3f7;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif; color: var(--text); background: var(--grey); }
+a { color: inherit; }
+
+/* ---------------- Shell: sidebar + main ---------------- */
+.shell { display: flex; min-height: 100vh; }
+.sidebar { width: 245px; flex-shrink: 0; background: var(--navy); color: #fff; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+.brand { background: var(--navy-top); text-align: center; padding: 28px 16px 10px; }
+.brand-logo { max-width: 180px; }
+.brand-text { font-size: 48px; font-weight: 900; letter-spacing: 2px; }
+.brand-title { font-size: 18px; margin-top: 18px; }
+.brand-sub { font-size: 14px; font-weight: 700; margin-top: 6px; }
+.sidebar nav { padding: 40px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.nav-item { display: flex; align-items: center; gap: 14px; padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #fff; font-size: 15px; }
+.nav-item:hover { background: rgba(255,255,255,.08); }
+.nav-item.active { background: var(--grey); color: var(--navy); font-weight: 600; }
+.ico { width: 26px; text-align: center; font-size: 20px; }
+.ico.big { font-size: 30px; }
+.logout { border-top: 2px solid #ffffff99; margin: 0 12px; padding: 18px 0 26px; }
+.logout button { background: none; border: 0; color: #fff; font-size: 22px; display: flex; gap: 14px; align-items: center; cursor: pointer; }
+
+.main { flex: 1; padding: 24px 28px 48px; min-width: 0; }
+.searchbar { background: #f6f6f6; border-radius: 22px; width: 330px; max-width: 100%; padding: 8px 16px; display: flex; gap: 10px; align-items: center; margin-bottom: 36px; }
+.searchbar input { border: 0; background: transparent; outline: none; flex: 1; font-size: 14px; }
+
+.page-title { font-size: 24px; margin: 0 0 4px; color: var(--navy); }
+.page-sub { margin: 0 0 22px; font-size: 13px; }
+.section-title { font-size: 22px; color: var(--navy); margin: 30px 0 14px; }
+.section-title.small { font-size: 15px; }
+.row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.alert { padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+.alert.success { background: #e6f7da; border: 1px solid #9bd77a; }
+.alert.error { background: #fde8e8; border: 1px solid #f19a9a; color: #8a0000; }
+.alert.error:empty, .validation-summary-valid { display: none; }
+.field-error { color: var(--danger); font-size: 12px; display: block; margin-top: 2px; }
+
+/* ---------------- Buttons ---------------- */
+.btn-primary { display: inline-block; text-align: center; background: var(--navy); color: #fff; border: 0; border-radius: 8px; padding: 11px 20px; font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; width: 100%; }
+.btn-primary.big { font-size: 26px; padding: 8px; border-radius: 12px; margin: 18px 0 10px; }
+.btn-primary.inline { width: auto; }
+.btn-primary.wide { max-width: 420px; display: block; margin: 30px auto 0; border-radius: 20px; font-size: 16px; }
+.btn-outline { display: block; text-align: center; margin-top: 8px; padding: 10px; border: 2px solid var(--navy); border-radius: 8px; text-decoration: none; }
+.btn-danger { background: #fff; color: var(--danger); border: 3px solid var(--danger); border-radius: 6px; font-size: 17px; font-weight: 700; padding: 6px 10px; cursor: pointer; width: 100%; }
+.link-btn { background: none; border: 0; color: var(--navy); cursor: pointer; font-size: 14px; }
+.right { text-align: right; }
+.center { text-align: center; }
+.small { font-size: 12px; }
+
+/* ---------------- Dashboard ---------------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; max-width: 760px; }
+.stat-card { background: #fff; padding: 18px 10px; text-align: center; text-decoration: none; }
+.stat-ico { font-size: 34px; }
+.stat-num { font-size: 22px; font-weight: 700; color: var(--navy); margin-top: 6px; }
+.stat-label { font-size: 12px; }
+.activity { background: #fff; border-radius: 4px; padding: 8px 22px; margin-bottom: 14px; max-width: 760px; }
+.a-title { font-size: 13px; }
+.a-detail { font-size: 10px; color: var(--muted); }
+.a-time { font-size: 10px; }
+
+/* ---------------- Events ---------------- */
+.event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.event-card { background: #fff; display: flex; text-decoration: none; border-radius: 6px; overflow: hidden; font-size: 13px; }
+.event-thumb { width: 110px; background: #d6e9f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.event-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb-ico { font-size: 40px; }
+.event-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.e-title { color: var(--navy); font-size: 14px; }
+.badge { font-size: 11px; padding: 3px 12px; border-radius: 3px; background: var(--badge); white-space: nowrap; }
+.badge.draft { background: #eee; } .badge.closed { background: #f6c6c6; } .badge.past { background: #e4e4e4; }
+
+.back { font-size: 13px; text-decoration: none; }
+.view-event { display: grid; grid-template-columns: 140px 1fr 120px; gap: 16px; align-items: start; max-width: 760px; }
+.ve-thumb { background: #d6e9f0; min-height: 155px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 13px; padding: 8px; }
+.ve-thumb img { width: 100%; height: 155px; object-fit: cover; }
+.ve-info { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.ve-actions { display: flex; flex-direction: column; gap: 12px; align-items: stretch; text-align: center; }
+.about { font-size: 13px; max-width: 760px; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 900px; }
+.form-grid .col { display: flex; flex-direction: column; }
+.form-grid label { font-weight: 600; font-size: 14px; margin: 12px 0 4px; }
+.form-grid input, .form-grid textarea, .form-grid select, .profile-form input, .profile-form select, .filter-bar select {
+    border: 0; background: #fff; padding: 9px 14px; font-size: 13px; font-family: inherit; border-radius: 2px; width: 100%; }
+.form-grid .btn-primary { margin-top: 24px; }
+.icon-input { display: flex; background: #fff; align-items: center; padding-left: 12px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+.grid-2.tight { gap: 8px; }
+.poster-preview { max-width: 160px; margin-top: 8px; }
+
+/* ---------------- Participants table ---------------- */
+.filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.filter-bar select { width: auto; border-radius: 8px; }
+.pill-search { display: flex; gap: 8px; background: #f6f6f6; border-radius: 18px; padding: 6px 14px; align-items: center; }
+.pill-search input { border: 0; background: transparent; outline: none; }
+.pill-search.wide { min-width: 320px; }
+.tab { border: 0; background: #f6f6f6; padding: 6px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+.tab.on { background: var(--navy); color: #fff; }
+.cc-table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 14px; }
+.cc-table thead th { background: var(--thead); color: var(--navy); text-align: left; padding: 8px 12px; font-size: 16px; }
+.cc-table td { background: #fff; padding: 8px 12px; }
+.pill { display: inline-block; min-width: 86px; text-align: center; padding: 3px 10px; border-radius: 3px; font-size: 11px; }
+.pill.attended { background: var(--attended); }
+.pill.registered { background: var(--registered); color: #001a33; }
+.pill.absent { background: #f1c9c9; }
+.actions form { display: inline-block; margin-right: 6px; }
+.mini { border: 0; border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.mini.green { background: #2dbe2d; color: #fff; }
+.mini.grey { background: #ccc; }
+
+/* ---------------- Profile & Settings ---------------- */
+.profile-form { display: grid; grid-template-columns: 110px 280px; gap: 10px 16px; align-items: center; font-size: 14px; }
+.profile-form label { font-weight: 700; }
+.profile-buttons { display: flex; gap: 16px; margin-top: 30px; }
+.btn-cancel { border: 3px solid #1f4cff; color: var(--navy); background: #fff; border-radius: 20px; padding: 4px 30px; font-weight: 700; text-decoration: none; }
+.btn-save { background: #1f4cff; color: #fff; border: 0; border-radius: 16px; padding: 6px 20px; font-weight: 700; cursor: pointer; }
+.pref-grid { display: grid; grid-template-columns: repeat(2, minmax(200px, 210px)); gap: 14px 16px; }
+.pref { background: #fff; padding: 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 13px; color: var(--navy); cursor: pointer; }
+.switch { appearance: none; width: 44px; height: 24px; background: #ccc; border-radius: 12px; position: relative; cursor: pointer; transition: .2s; flex-shrink: 0; }
+.switch::after { content: ""; position: absolute; width: 18px; height: 18px; top: 3px; left: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+.switch:checked { background: var(--navy); }
+.switch:checked::after { left: 23px; }
+
+/* ---------------- Login / Register ("Welcome Page" / "Create Account") ---------------- */
+.auth-body { background: #f2f2f2; min-height: 100vh; position: relative; overflow-x: hidden; }
+.auth-wrap { display: flex; gap: 40px; padding: 40px 60px; position: relative; z-index: 1; align-items: flex-start; }
+.auth-left { width: 340px; text-align: center; flex-shrink: 0; }
+.logo-card { background: #fff; padding: 30px; }
+.logo-card img { max-width: 100%; }
+.logo-fallback { font-size: 72px; font-weight: 900; color: var(--navy); }
+.auth-left h1 { font-size: 44px; color: var(--navy); margin: 30px 0 0; font-weight: 500; }
+.auth-left h2 { font-size: 26px; color: var(--navy); margin: 4px 0 18px; font-weight: 600; }
+.tagline { font-size: 24px; color: var(--navy); }
+.auth-panel { flex: 1; max-width: 900px; background: var(--grey); border-radius: 28px; padding: 60px 40px 50px; min-height: 560px; }
+.auth-title { font-size: 26px; color: var(--navy); margin: 0; }
+.auth-sub { font-size: 12px; margin: 4px 0 8px; }
+.pill-input { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 12px; padding: 12px 18px; margin-top: 14px; }
+.pill-input input, .pill-input select { border: 0; outline: none; flex: 1; font-size: 14px; background: transparent; font-family: inherit; }
+.pill-input .eye { border: 0; background: none; cursor: pointer; }
+.big-link { font-size: 20px; color: var(--navy); }
+.big-link a { text-decoration: none; }
+.cloud { position: fixed; background: var(--cloud); border-radius: 50%; z-index: 0; }
+.c1 { width: 300px; height: 300px; left: -80px; bottom: -150px; }
+.c2 { width: 220px; height: 220px; left: 150px; bottom: -130px; }
+.c3 { width: 200px; height: 200px; left: 300px; bottom: -120px; }
+
+/* ---------------- Small screens ---------------- */
+@media (max-width: 900px) {
+    .shell { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; }
+    .sidebar nav { flex-direction: row; flex-wrap: wrap; padding: 12px; }
+    .form-grid, .grid-2, .view-event { grid-template-columns: 1fr; }
+    .auth-wrap { flex-direction: column; padding: 20px; }
+    .auth-left { width: 100%; }
+    .profile-form { grid-template-columns: 1fr; }
+    .pref-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------- Cafeteria Staff (Current Redemptions / History) ---------------- */
+.staff-chip { margin: 0 18px 14px; padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,.08); font-size: 13px; line-height: 1.4; }
+.staff-chip span { font-size: 11px; opacity: .8; }
+.caf-stats { margin-bottom: 22px; }
+.code-lookup .pill-search { background: #fff; }
+.code-lookup .pill-search.wide { min-width: 420px; }
+.code-lookup input { width: 100%; font-size: 15px; }
+.empty-queue { background: #fff; padding: 30px; text-align: center; max-width: 760px; border-radius: 6px; }
+.redeem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.redeem-card { background: #fff; border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; border-left: 6px solid var(--registered); }
+.redeem-card.expired { border-left-color: var(--danger); }
+.rc-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rc-code { font-size: 20px; font-weight: 700; color: var(--navy); letter-spacing: .5px; }
+.rc-coupon { font-size: 17px; font-weight: 600; color: var(--navy); }
+.rc-points { font-size: 13px; color: var(--danger); font-weight: 700; margin-left: 6px; }
+.rc-student { font-size: 14px; }
+.rc-meta { font-size: 12px; color: var(--muted); }
+.danger { color: var(--danger); }
+.rc-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.btn-approve { width: 100%; background: #2dbe2d; color: #fff; border: 0; border-radius: 8px; padding: 11px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.btn-approve:hover { background: #24a524; }
+.reject-form { display: flex; gap: 8px; }
+.reject-form select { flex: 1; border: 1px solid #ddd; border-radius: 8px; padding: 8px; font-family: inherit; font-size: 13px; background: #fff; }
+.btn-reject { background: #fff; color: var(--danger); border: 2px solid var(--danger); border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.btn-reject:hover { background: #fde8e8; }
+.date-in { border: 0; border-radius: 8px; padding: 6px 8px; font-family: inherit; margin-left: 4px; }
+@media (max-width: 900px) {
+    .code-lookup .pill-search.wide { min-width: 0; width: 100%; }
+    .redeem-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------- Meals / Coupons page ---------------- */
+.meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.meal-card { background: #fff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+.meal-card.off { opacity: .7; }
+.meal-img { height: 150px; background: #d6e9f0; display: flex; align-items: center; justify-content: center; }
+.meal-img img { width: 100%; height: 100%; object-fit: cover; }
+.meal-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 5px; }
+.meal-title { color: var(--navy); font-size: 16px; }
+.meal-points { font-size: 24px; font-weight: 800; color: #fe0707; }
+.meal-points span { font-size: 13px; font-weight: 600; color: var(--muted); }
+.meal-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.meal-actions form { display: inline; }
+.meal-actions a.mini { text-decoration: none; color: #000; display: inline-block; }
+.mini.red { background: #fde8e8; color: var(--danger); }
+.form-grid .check-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+.form-grid .check-row input { width: auto; }

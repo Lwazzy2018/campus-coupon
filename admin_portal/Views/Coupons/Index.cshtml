@@ -1,0 +1,75 @@
+@model List<CouponRow>
+@{
+    var caf = ViewData["IsCafeteria"] as bool? ?? false;
+    var show = ViewData["Show"] as string ?? "All";
+    var noun = caf ? "Meal" : "Coupon";
+    ViewData["Title"] = caf ? "Meals" : "Coupons";
+}
+<!-- Use Case: Coupon Allocation | SRS: Coupon Management -->
+<div class="row-between">
+    <div>
+        <h1 class="page-title">@(caf ? "Meals" : "Coupons")</h1>
+        <p class="page-sub">
+            @(caf ? "The meals students can buy with their points. Available meals show in the student app straight away."
+                  : "Everything students can redeem with points: cafeteria meals (Food) and CUT merchandise (Retail).")
+        </p>
+    </div>
+    <a class="btn-primary inline" asp-action="Create">+ Add @noun.ToLower()</a>
+</div>
+
+<form method="get" asp-action="Index" class="filter-bar">
+    @foreach (var s in new[] { "All", "Available", "Switched off", "Expired" })
+    {
+        <button type="submit" name="show" value="@s" class="tab @(s == show ? "on" : "")">@s</button>
+    }
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-queue"><div class="stat-ico">🍔</div><p>No @(noun.ToLower())s here yet. Click <b>+ Add @noun.ToLower()</b> to create one.</p></div>
+}
+
+<div class="meal-grid">
+@foreach (var c in Model)
+{
+    <div class="meal-card @(c.IsActive && !c.IsExpired ? "" : "off")">
+        <div class="meal-img">
+            @if (!string.IsNullOrEmpty(c.ImageUrl)) { <img src="@c.ImageUrl" alt="" /> }
+            else { <span class="thumb-ico">@(c.Category == "Food" ? "🍔" : "👕")</span> }
+        </div>
+        <div class="meal-body">
+            <div class="row-between">
+                <b class="meal-title">@c.Title</b>
+                <span class="pill @c.StatusPill">@c.StatusLabel</span>
+            </div>
+            <div class="meal-points">@c.PointsCost <span>points</span></div>
+            <div class="small">@(caf ? "" : c.Category + " · ")Valid until @c.ValidUntil.ToString("d MMM yyyy")</div>
+            <div class="small">📍 @c.Location</div>
+            <div class="small">🎟️ Redeemed @c.RedeemedCount time(s)</div>
+
+            <div class="meal-actions">
+                <a class="mini grey" asp-action="Edit" asp-route-id="@c.CouponId">✎ Edit</a>
+                <form asp-action="Toggle" method="post">
+                    <input type="hidden" name="id" value="@c.CouponId" />
+                    <input type="hidden" name="active" value="@(c.IsActive ? "false" : "true")" />
+                    <input type="hidden" name="show" value="@show" />
+                    <button type="submit" class="mini @(c.IsActive ? "grey" : "green")">@(c.IsActive ? "⏸ Switch off" : "▶ Switch on")</button>
+                </form>
+                @if (c.RedeemedCount == 0)
+                {
+                    <form asp-action="Delete" method="post" data-confirm="Delete &quot;@c.Title&quot;? This cannot be undone.">
+                        <input type="hidden" name="id" value="@c.CouponId" />
+                        <button type="submit" class="mini red">🗑 Delete</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+<script>
+    document.querySelectorAll('form[data-confirm]').forEach(function (f) {
+        f.addEventListener('submit', function (e) { if (!confirm(f.dataset.confirm)) e.preventDefault(); });
+    });
+</script>

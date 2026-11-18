@@ -1,0 +1,37 @@
+@model (EventRow Event, List<ParticipantRow> People)
+@{
+    var e = Model.Event;
+    ViewData["Title"] = e.Title;
+}
+<!-- Figma web: "View Event" -->
+<p><a asp-action="Index" class="back">Back to events</a></p>
+
+<div class="view-event">
+    <div class="ve-thumb">
+        @if (!string.IsNullOrEmpty(e.ImageUrl)) { <img src="@e.ImageUrl" alt="" /> }
+        else { <div class="thumb-ico">📅</div><b>@e.Title</b> }
+    </div>
+    <div class="ve-info">
+        <b class="e-title">@e.Title</b>
+        <div>🗓️ @e.DateLabel</div>
+        <div>🕑 @e.TimeLabel</div>
+        <div>📍 @e.Location</div>
+        <div>🪙 @e.PointsReward Points</div>
+        <div>👥 @e.RsvpCount RSVPs</div>
+    </div>
+    <div class="ve-actions">
+        <span class="badge @e.Badge.ToLower()">@e.Badge</span>
+        <a class="btn-primary" asp-action="Edit" asp-route-id="@e.EventId">Edit Event</a>
+        <form asp-action="Delete" asp-route-id="@e.EventId" method="post"
+              onsubmit="return confirm('Delete this event? If students already RSVP\'d it will be closed instead.');">
+            <button type="submit" class="btn-danger">Delete Event</button>
+        </form>
+    </div>
+</div>
+
+<h3 class="section-title small">About this event</h3>
+<p class="about">@e.Description</p>
+
+<!-- Sequence Diagram 2, steps 13-22: RSVP list with attendance status + approve attendance -->
+<h3 class="section-title small">RSVP list</h3>
+<partial name="_ParticipantsTable" model="Model.People" />

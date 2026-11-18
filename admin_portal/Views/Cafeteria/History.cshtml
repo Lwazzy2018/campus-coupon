@@ -1,0 +1,63 @@
+@model List<RedemptionRecord>
+@{
+    var stats = ViewData["Stats"] as CafeteriaStats ?? new CafeteriaStats();
+    var status = ViewData["Status"] as string ?? "All";
+    var q = ViewData["Query"] as string;
+    var from = ViewData["From"] as string;
+    var to = ViewData["To"] as string;
+}
+<!-- SRS: Cafeteria staff "maintain or support redemption records" -->
+<h1 class="page-title">Redemption History</h1>
+<p class="page-sub">Every coupon students have redeemed, and what the cafeteria did with it.</p>
+
+<div class="stat-row caf-stats">
+    <div class="stat-card"><div class="stat-ico">⏳</div><div class="stat-num">@stats.Pending</div><div class="stat-label">Waiting now</div></div>
+    <div class="stat-card"><div class="stat-ico">✅</div><div class="stat-num">@stats.ApprovedTotal</div><div class="stat-label">Approved (all time)</div></div>
+    <div class="stat-card"><div class="stat-ico">❌</div><div class="stat-num">@stats.RejectedTotal</div><div class="stat-label">Rejected (all time)</div></div>
+</div>
+
+<form method="get" asp-action="History" class="filter-bar" id="hf">
+    <div class="pill-search"><span>🔍</span><input name="q" value="@q" placeholder="Code, student number or name" /></div>
+    <label class="small">From <input type="date" name="from" value="@from" class="date-in" /></label>
+    <label class="small">To <input type="date" name="to" value="@to" class="date-in" /></label>
+    @foreach (var s in new[] { "All", "Pending", "Approved", "Rejected" })
+    {
+        <button type="submit" name="status" value="@s" class="tab @(s == status ? "on" : "")">@s</button>
+    }
+    <a class="link-btn" asp-action="History">Clear</a>
+    <a class="btn-primary inline" asp-action="Export" asp-route-status="@status" asp-route-q="@q" asp-route-from="@from" asp-route-to="@to">⬇ Download CSV</a>
+</form>
+
+<p class="small">Showing @Model.Count record(s)@(Model.Count >= 300 ? " - the most recent 300. Narrow the dates to see older ones." : ".")</p>
+
+<table class="cc-table">
+    <thead>
+        <tr><th>Redeemed</th><th>Code</th><th>Coupon</th><th>Points</th><th>Student</th><th>Status</th><th>Processed</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.CreatedAt.ToLocalTime().ToString("d MMM yyyy HH:mm")</td>
+            <td><code>@r.RedemptionCode</code></td>
+            <td>@r.CouponTitle</td>
+            <td>@r.PointsCost</td>
+            <td>@r.StudentName<div class="small">@r.StudentNumber</div></td>
+            <td><span class="pill @r.StatusPill">@r.StatusLabel</span></td>
+            <td>
+                @if (r.ProcessedAt is not null)
+                {
+                    @r.ProcessedAt.Value.ToLocalTime().ToString("d MMM yyyy HH:mm")
+                    <div class="small">by @r.ProcessedBy</div>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-route-q="@r.RedemptionCode">Process now →</a>
+                }
+            </td>
+            <td>@(r.RejectReason ?? "")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+@if (Model.Count == 0) { <p>No redemptions match these filters.</p> }

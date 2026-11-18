@@ -1,0 +1,65 @@
+@model CouponFormVm
+@{
+    var caf = ViewData["IsCafeteria"] as bool? ?? false;
+    var editing = Model.CouponId.HasValue;
+    var noun = caf ? "Meal" : "Coupon";
+    ViewData["Title"] = (editing ? "Edit " : "Add ") + noun;
+}
+<h1 class="page-title">@ViewData["Title"]</h1>
+<p class="page-sub">@(caf ? "This is what students see in the Coupons tab of the app." : "Food = cafeteria meals, Retail = CUT merchandise.")</p>
+
+<form asp-action="@(editing ? "Edit" : "Create")" asp-route-id="@Model.CouponId" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="alert error"></div>
+    <input type="hidden" asp-for="ImageUrl" />
+
+    <div class="form-grid">
+        <div class="col">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" placeholder="@(caf ? "e.g. Chicken & Chips" : "e.g. CUT Hoodie")" />
+            <span asp-validation-for="Title" class="field-error"></span>
+
+            @if (caf)
+            {
+                <input type="hidden" asp-for="Category" value="Food" />
+            }
+            else
+            {
+                <label asp-for="Category"></label>
+                <select asp-for="Category">
+                    <option value="Food">Food (cafeteria meal)</option>
+                    <option value="Retail">Retail (merchandise)</option>
+                </select>
+                <span asp-validation-for="Category" class="field-error"></span>
+            }
+
+            <label asp-for="PointsCost"></label>
+            <div class="icon-input"><span>🪙</span><input asp-for="PointsCost" type="number" min="1" max="10000" /></div>
+            <span asp-validation-for="PointsCost" class="field-error"></span>
+
+            <label asp-for="ValidUntil"></label>
+            <input asp-for="ValidUntil" type="date" asp-format="{0:yyyy-MM-dd}" />
+            <span asp-validation-for="ValidUntil" class="field-error"></span>
+
+            <label asp-for="Location"></label>
+            <input asp-for="Location" placeholder="Where students collect it" />
+            <span asp-validation-for="Location" class="field-error"></span>
+        </div>
+
+        <div class="col">
+            <label asp-for="Terms"></label>
+            <textarea asp-for="Terms" rows="5" placeholder="One rule per line"></textarea>
+            <span asp-validation-for="Terms" class="field-error"></span>
+
+            <label asp-for="Photo"></label>
+            <input asp-for="Photo" type="file" accept=".jpg,.jpeg,.png,.webp" />
+            <span asp-validation-for="Photo" class="field-error"></span>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl)) { <img src="@Model.ImageUrl" class="poster-preview" alt="Current photo" /> }
+
+            <label class="check-row"><input asp-for="IsActive" /> Available to students</label>
+            <p class="small">Untick to save it without students seeing it yet. You can switch it on later.</p>
+
+            <button type="submit" class="btn-primary">@(editing ? "Save Changes" : "Add " + noun)</button>
+            <a class="btn-outline" asp-action="Index">Cancel</a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,16 @@
+@model NotificationPrefs
+@{ ViewData["Title"] = "Notification Settings"; }
+<!-- Figma web: "Notification Settings" - white option tiles with toggles + Save Preference -->
+<h1 class="page-title">Notification Settings</h1>
+<p class="page-sub">Choose what you would like to be notified about.</p>
+
+<form asp-action="Notifications" method="post">
+    <div class="pref-grid">
+        <label class="pref"><span>New Event Registration</span><input asp-for="NewEventRegistration" class="switch" /></label>
+        <label class="pref"><span>Event Attendance Updates</span><input asp-for="AttendanceUpdates" class="switch" /></label>
+        <label class="pref"><span>Points Redemptions</span><input asp-for="PointsRedemptions" class="switch" /></label>
+        <label class="pref"><span>📣 System Announcements</span><input asp-for="SystemAnnouncements" class="switch" /></label>
+        <label class="pref"><span>Weekly Reports</span><input asp-for="WeeklyReports" class="switch" /></label>
+    </div>
+    <button type="submit" class="btn-primary wide">Save Preference</button>
+</form>
