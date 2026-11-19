@@ -1,4 +1,43 @@
 # Campus Coupon – starter code (ITC327W, Prominent Programmers)
+## Live demo
+- **Student app:** https://campus-coupon.onrender.com
+- **Admin & cafeteria portal:** https://campus-coupon-admin.onrender.com (login available on request)
+
+> The portal runs on a free server, so the first visit can take about a minute to wake up.
+
+## Screenshots
+
+### Event Administrator portal
+| Dashboard | Events |
+|---|---|
+| ![Dashboard](screenshots/03_dashboard.png) | ![Events](screenshots/04_events.png) |
+
+| Create event | Participants and attendance |
+|---|---|
+| ![Create event](screenshots/06_create_event.png) | ![Participants](screenshots/07_participants.png) |
+
+| Event details | Redemptions |
+|---|---|
+| ![Event details](screenshots/05_event_details.png) | ![Redemptions](screenshots/08_redemptions.png) |
+
+### Cafeteria Staff portal
+| Current redemptions (approve or reject) | Redemption history |
+|---|---|
+| ![Current redemptions](screenshots/11_cafeteria_current.png) | ![Redemption history](screenshots/12_cafeteria_history.png) |
+
+| Meals | Add a meal |
+|---|---|
+| ![Meals](screenshots/13_meals.png) | ![Add meal](screenshots/14_add_meal.png) |
+
+### Account
+| Login | Register (staff) |
+|---|---|
+| ![Login](screenshots/01_login.png) | ![Register](screenshots/02_register.png) |
+
+| Profile | Notification settings |
+|---|---|
+| ![Profile](screenshots/09_profile.png) | ![Notification settings](screenshots/10_notification_settings.png) |
+
 
 Built from the Phase 2 design pack: Use Case Diagram, Sequence Diagrams 1 & 2,
 System Architecture Diagram, ERD, 9 Flutter screens and 8 ASP.NET screens.
